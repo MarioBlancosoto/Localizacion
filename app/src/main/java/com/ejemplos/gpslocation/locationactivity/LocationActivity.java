@@ -5,16 +5,17 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LocationActivity extends AppCompatActivity {
+
+
+public class LocationActivity extends FragmentActivity {
 
     private static final String TAG = "gpslog";
     private LocationManager mLocMgr;
