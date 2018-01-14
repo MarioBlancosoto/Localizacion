@@ -67,6 +67,14 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
             Log.i(TAG, "Lat " + location.getLatitude() + " Long " + location.getLongitude());
             textViewGPS.setText("Lat " + location.getLatitude() + " Long " + location.getLongitude());
 
+            // movemos la camara para la nueva posicion
+            LatLng nuevaPosicion = new LatLng(location.getLatitude(),location.getLongitude());
+            CameraPosition cameraPosition = CameraPosition.builder()
+                    .target(nuevaPosicion)
+                    .zoom(15)
+                    .build();
+
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
 
         public void onProviderDisabled(String provider) {
