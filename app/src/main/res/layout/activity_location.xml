@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.ejemplos.gpslocation.locationactivity.LocationActivity">
-
-    <fragment
+    android:layout_height="match_parent">
+    
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
@@ -16,7 +17,17 @@
     <TextView
         android:id="@+id/lat"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_height="20dp"
+        app:layout_constraintTop_toTopOf="@+id/map"
+        android:layout_marginTop="10dp"
+        android:text="Lat/long" />
+
+    <TextView
+        android:id="@+id/dist"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Distancia"
+        app:layout_constraintTop_toTopOf="@+id/map" />
 
 </android.support.constraint.ConstraintLayout>

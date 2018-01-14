@@ -26,20 +26,25 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
 
     private static final String TAG = "gpslog";
     private LocationManager mLocMgr;
-    private TextView textViewGPS, label;
+    private TextView textViewGPS, textViewDist;
 
     private GoogleMap mMap;
+    // coordenadas del tesoro
+    private LatLng tesoro;
+    private Location tesoroLoc;
+    private double lat=42.263044, lng=-8.802236;
 
     //Minimo tiempo para updates en Milisegundos
-    private static final long MIN_CAMBIO_DISTANCIA_PARA_UPDATES = (long) 5; // 5 metro
+    private static final long MIN_CAMBIO_DISTANCIA_PARA_UPDATES = (long) 20; // 20 metro
     //Minimo tiempo para updates en Milisegundos
-    private static final long MIN_TIEMPO_ENTRE_UPDATES = 5000; // 5 sg
+    private static final long MIN_TIEMPO_ENTRE_UPDATES = 10000; // 10 sg
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         textViewGPS = (TextView) findViewById(R.id.lat);
+        textViewDist = (TextView) findViewById(R.id.dist);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -55,17 +60,21 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         } else {
             Log.i(TAG, "Permisos necesarios OK!.");
             // registra el listener para obtener actualizaciones
-            mLocMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIEMPO_ENTRE_UPDATES, MIN_CAMBIO_DISTANCIA_PARA_UPDATES, locListener, Looper.getMainLooper());
+            mLocMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIEMPO_ENTRE_UPDATES, MIN_CAMBIO_DISTANCIA_PARA_UPDATES, locListener, Looper.getMainLooper());
         }
         textViewGPS.setText("Lat " + " Long ");
-
+        // creamos objetos para determinar el tesoro
+        tesoro = new LatLng(lat,lng);
+        tesoroLoc = new Location(LocationManager.GPS_PROVIDER);
+        tesoroLoc.setLatitude(lat);
+        tesoroLoc.setLongitude(lng);
     }
 
     // recibe notificaciones del LocationManager
     public LocationListener locListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             Log.i(TAG, "Lat " + location.getLatitude() + " Long " + location.getLongitude());
-            textViewGPS.setText("Lat " + location.getLatitude() + " Long " + location.getLongitude());
+            textViewGPS.setText("Lat " + (float)location.getLatitude() + " Long " + (float)location.getLongitude());
 
             // movemos la camara para la nueva posicion
             LatLng nuevaPosicion = new LatLng(location.getLatitude(),location.getLongitude());
@@ -75,6 +84,9 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                     .build();
 
             mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            //calculamos la distancia a la marca
+            textViewDist.setText(String.valueOf(location.distanceTo(tesoroLoc)));
         }
 
         public void onProviderDisabled(String provider) {
@@ -108,9 +120,8 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         }
         mMap.setMyLocationEnabled(true);
 
-        // Engadimos marca
-        LatLng darbo = new LatLng(42.263044, -8.802236);
-        mMap.addMarker(new MarkerOptions().position(darbo).title("Marca en Darbo"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(darbo));
+        // Engadimos tesoro
+        mMap.addMarker(new MarkerOptions().position(tesoro).title("Marca de Tesoro"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(tesoro));
     }
 }
