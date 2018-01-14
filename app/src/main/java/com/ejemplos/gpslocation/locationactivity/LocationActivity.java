@@ -21,9 +21,9 @@ public class LocationActivity extends AppCompatActivity {
     private TextView textViewGPS, label;
 
     //Minimo tiempo para updates en Milisegundos
-    private static final long MIN_CAMBIO_DISTANCIA_PARA_UPDATES = (long) 1; // 1 metro
+    private static final long MIN_CAMBIO_DISTANCIA_PARA_UPDATES = (long) 5; // 5 metro
     //Minimo tiempo para updates en Milisegundos
-    private static final long MIN_TIEMPO_ENTRE_UPDATES = 1000; // 1 sg
+    private static final long MIN_TIEMPO_ENTRE_UPDATES = 5000; // 5 sg
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +39,13 @@ public class LocationActivity extends AppCompatActivity {
             return;
         }else{
             Log.i(TAG, "Permisos necesarios OK!.");
+            // registra el listener para obtener actualizaciones
             mLocMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIEMPO_ENTRE_UPDATES, MIN_CAMBIO_DISTANCIA_PARA_UPDATES, locListener, Looper.getMainLooper());
         }
         textViewGPS.setText("Lat " +    " Long " );
 
     }
-
+    // recibe notificaciones del LocationManager
     public LocationListener locListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             Log.i(TAG, "Lat " + location.getLatitude() + " Long " + location.getLongitude());
